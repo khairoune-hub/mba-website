@@ -23,8 +23,9 @@ export function MobileNav({ links, labels, children }: { links: ResolvedLink[]; 
   useEffect(() => {
     if (!open) return
     document.documentElement.style.overflow = 'hidden'
+    document.documentElement.style.overscrollBehavior = 'none'
     const focusables = () => Array.from(panelRef.current?.querySelectorAll<HTMLElement>('a, button') ?? [])
-    focusables()[0]?.focus()
+    focusables()[0]?.focus({ preventScroll: true })
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false)
       if (e.key === 'Tab') {
@@ -38,8 +39,9 @@ export function MobileNav({ links, labels, children }: { links: ResolvedLink[]; 
     window.addEventListener('keydown', onKey)
     return () => {
       document.documentElement.style.overflow = ''
+      document.documentElement.style.overscrollBehavior = ''
       window.removeEventListener('keydown', onKey)
-      buttonRef.current?.focus()
+      buttonRef.current?.focus({ preventScroll: true })
     }
   }, [open])
 
@@ -61,7 +63,7 @@ export function MobileNav({ links, labels, children }: { links: ResolvedLink[]; 
         createPortal(
           <>
       <div
-        className={`fixed inset-0 z-50 bg-navy/40 backdrop-blur-sm transition-opacity duration-300 ${open ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+        className={`fixed inset-0 z-50 bg-navy/50 transition-opacity duration-300 ${open ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
         onClick={() => setOpen(false)}
         aria-hidden="true"
       />
@@ -73,7 +75,7 @@ export function MobileNav({ links, labels, children }: { links: ResolvedLink[]; 
         role="dialog"
         aria-modal="true"
         aria-label={labels.menu}
-        className={`absolute inset-y-0 end-0 flex w-[min(88vw,380px)] flex-col overflow-hidden bg-white shadow-2xl transition-transform duration-400 ease-[var(--ease-out)] ${
+        className={`absolute inset-y-0 end-0 flex w-[min(88vw,380px)] flex-col overflow-hidden bg-white shadow-2xl will-change-transform transition-[transform,visibility] duration-300 ease-[var(--ease-out)] ${
           open ? 'translate-x-0' : 'translate-x-full rtl:-translate-x-full'
         } ${open ? '' : 'invisible'}`}
       >
