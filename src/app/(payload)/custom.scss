@@ -1,0 +1,35 @@
+/* MBA admin branding: green accent, brand radius, logo sizing. */
+:root {
+  --color-charcoal: #424243;
+  --color-green: #90be41;
+  --mba-green: #90be41;
+  --mba-green-hover: #9cc853;
+  --mba-charcoal: #424243;
+}
+
+.mba-admin-logo { width: 260px; max-width: 100%; height: auto; }
+.mba-admin-icon { width: 30px; height: auto; }
+
+.btn--style-primary {
+  --bg-color: var(--mba-green);
+  --hover-bg: var(--mba-green-hover);
+  --color: var(--mba-charcoal);
+  --hover-color: var(--mba-charcoal);
+  background-color: var(--mba-green);
+  color: var(--mba-charcoal);
+  &:hover:not(:disabled) { background-color: var(--mba-green-hover); color: var(--mba-charcoal); }
+}
+
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--mba-green);
+  outline-offset: 2px;
+}
+
+.template-minimal, .login {
+  background:
+    radial-gradient(40% 55% at 0% 25%, rgb(144 190 65 / 0.28), transparent 70%),
+    radial-gradient(40% 55% at 100% 90%, rgb(144 190 65 / 0.28), transparent 70%);
+}
+
+.nav__link--active, .nav-group__toggle--open { box-shadow: inset 3px 0 0 var(--mba-green); }
+html[dir='rtl'] .nav__link--active { box-shadow: inset -3px 0 0 var(--mba-green); }
