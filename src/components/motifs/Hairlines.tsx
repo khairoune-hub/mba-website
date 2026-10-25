@@ -1,4 +1,5 @@
 import { roundedPath, slantDx } from '@/lib/geometry'
+import { DrawPaths } from '../motion/DrawPaths'
 
 type Preset = 'hero' | 'band' | 'section' | 'values' | 'footer'
 
@@ -34,12 +35,17 @@ export function Hairlines({
   preset = 'section',
   tone = 'green',
   className = '',
+  animate = 'view',
 }: {
   preset?: Preset
   tone?: 'green' | 'white'
   className?: string
+  /** 'view': draw when scrolled into view · 'load': draw on page load · 'none': static */
+  animate?: 'view' | 'load' | 'none'
 }) {
   const stroke = tone === 'white' ? 'rgb(255 255 255 / .55)' : 'rgb(144 190 65 / .45)'
+  const cls = `flip-rtl pointer-events-none absolute inset-0 h-full w-full ${className}`
+  if (animate !== 'none') return <DrawPaths paths={presets[preset]} stroke={stroke} className={cls} onLoad={animate === 'load'} />
   return (
     <svg
       aria-hidden="true"

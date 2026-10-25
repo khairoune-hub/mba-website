@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { MARK_VIEWBOX, PATH_A, PATH_M, PATH_SUMMIT } from '../brand/mark-paths'
 import type { HomeContent, ShapeKey } from '@/content/defaults'
 import { Tri } from '../motifs/Tri'
@@ -25,11 +25,36 @@ function withKeyword(body: string, keyword: string) {
 
 /** Brand book slide 4. Hovering or focusing a shape (or its caption) highlights the pair. */
 export function IconMeaning({ data, eyebrow, title, hint }: { data: HomeContent['iconMeaning']; eyebrow: string; title: string; hint: string }) {
-  const [active, setActive] = useState<ShapeKey | null>(null)
+  const [active, setActiveState] = useState<ShapeKey | null>(null)
+  const [paused, setPaused] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
+  // User interaction takes over from the auto-cycle.
+  const setActive = (k: ShapeKey | null) => {
+    setPaused(k !== null)
+    setActiveState(k)
+  }
+
+  // Auto-cycle M → A → summit every 3.5s while visible and not hovered/focused; off under reduced motion.
+  useEffect(() => {
+    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let visible = false
+    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting), { threshold: 0.4 })
+    if (sectionRef.current) io.observe(sectionRef.current)
+    const order: ShapeKey[] = ['m', 'a', 'summit']
+    let i = 0
+    const id = window.setInterval(() => {
+      if (!visible) return
+      setActiveState(order[i++ % order.length])
+    }, 3500)
+    return () => {
+      window.clearInterval(id)
+      io.disconnect()
+    }
+  }, [paused])
   const byShape = Object.fromEntries(data.items.map((it) => [it.shape, it])) as Record<ShapeKey, (typeof data.items)[number] | undefined>
 
   return (
-    <section className="section-y relative" aria-labelledby="icon-title">
+    <section ref={sectionRef} className="section-y relative" aria-labelledby="icon-title">
       <div className="container-mba grid items-center gap-14 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <p className="t-eyebrow inline-flex items-center gap-2">

@@ -2,11 +2,12 @@ import type { Locale } from '@/i18n/config'
 import { href } from '@/i18n/routes'
 import type { HomeContent } from '@/content/defaults'
 import { getDictionary } from '@/i18n'
-import { MbaMark } from '../brand/MbaMark'
+import { MarkAssemble } from '../motion/MarkAssemble'
 import { Hairlines } from '../motifs/Hairlines'
 import { LinkArrow } from '../ui/Button'
 import { Eyebrow } from '../ui/SectionHeader'
 import { Reveal } from '../ui/Reveal'
+import { SplitReveal } from '../motion/SplitReveal'
 
 /** Renders `body`, wrapping the first occurrence of `highlight` in a white box. */
 function withHighlight(body: string, highlight?: string) {
@@ -29,13 +30,13 @@ export function WhoWeAre({ locale, who }: { locale: Locale; who: HomeContent['wh
       <Hairlines preset="band" tone="white" />
       <div className="container-mba section-y relative grid gap-10 lg:grid-cols-12">
         <Reveal className="lg:col-span-3">
-          <MbaMark variant="onGreen" className="h-16 w-auto md:h-20" />
+          <MarkAssemble variant="onGreen" className="h-16 w-auto md:h-24" />
         </Reveal>
         <div className="lg:col-span-8">
           <Reveal>
             <p className="t-eyebrow !text-navy">{t.home.whoEyebrow}</p>
             <h2 id="who-title" className="t-h2 mt-3 !text-navy">
-              {who.title}
+              <SplitReveal text={who.title} />
             </h2>
           </Reveal>
           <Reveal delay={0.08}>

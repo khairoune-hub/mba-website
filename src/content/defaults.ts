@@ -14,7 +14,8 @@ export interface HomeContent {
   pillars: { key: PillarKey; title: string; body: string }[]
   iconMeaning: { items: { shape: ShapeKey; keyword: string; body: string }[]; closing: string }
   cta: { title: string; body: string; buttonLabel: string }
-  sections: { pillars: boolean; values: boolean; iconMeaning: boolean; news: boolean; events: boolean; cta: boolean }
+  stats: { value: number; prefix?: string; suffix?: string; label: string }[]
+  sections: { stats: boolean; pillars: boolean; values: boolean; iconMeaning: boolean; news: boolean; events: boolean; cta: boolean }
 }
 
 export interface ValueItem {
@@ -38,7 +39,7 @@ export interface AboutContent {
   team: { name: string; role: string }[]
 }
 
-const sections = { pillars: true, values: true, iconMeaning: true, news: true, events: true, cta: true }
+const sections = { stats: true, pillars: true, values: true, iconMeaning: true, news: true, events: true, cta: true }
 
 export const homeDefaults: Record<Locale, HomeContent> = {
   ar: {
@@ -72,6 +73,12 @@ export const homeDefaults: Record<Locale, HomeContent> = {
       body: 'لأن بعض التحديات لا تواجهها مؤسسة بمفردها، وبعض الفرص تصبح أكبر عندما نبني بشكل جماعي.',
       buttonLabel: 'انضم إلى التحالف',
     },
+    stats: [
+      { value: 15, label: 'دولة في مجموعة CEDEAO' },
+      { value: 400, prefix: '+', suffix: ' M', label: 'مستهلك في غرب إفريقيا' },
+      { value: 3, label: 'قطاعات: صناعة، تجارة، خدمات' },
+      { value: 1000, prefix: '+', label: 'عام من تقاليد التجارة الميزابية' },
+    ],
     sections,
   },
   fr: {
@@ -105,6 +112,12 @@ export const homeDefaults: Record<Locale, HomeContent> = {
       body: 'Certains défis ne se relèvent pas seul, et certaines opportunités grandissent lorsque l’on bâtit ensemble.',
       buttonLabel: 'Rejoindre l’alliance',
     },
+    stats: [
+      { value: 15, label: 'pays de la CEDEAO' },
+      { value: 400, prefix: '+', suffix: ' M', label: 'consommateurs en Afrique de l’Ouest' },
+      { value: 3, label: 'secteurs : industrie, commerce, services' },
+      { value: 1000, prefix: '+', label: 'ans de tradition commerciale mozabite' },
+    ],
     sections,
   },
 }

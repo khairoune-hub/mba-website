@@ -6,3 +6,4 @@ node_modules
 next-env.d.ts
 /media
 /.local-s3
+__pycache__/

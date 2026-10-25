@@ -11,6 +11,7 @@ import { PillarsTriad } from '@/components/sections/PillarsTriad'
 import { ValuesPreview } from '@/components/sections/ValuesPreview'
 import { IconMeaning } from '@/components/sections/IconMeaning'
 import { CtaBand } from '@/components/sections/CtaBand'
+import { StatsBand } from '@/components/sections/StatsBand'
 import { PostCard } from '@/components/cards/PostCard'
 import { EventCard } from '@/components/cards/EventCard'
 import { SectionHeader } from '@/components/ui/SectionHeader'
@@ -42,6 +43,7 @@ export default async function HomePage({ params }: Props) {
     <>
       <HomeHero locale={locale} hero={home.hero} />
       <WhoWeAre locale={locale} who={home.who} />
+      {s.stats !== false && <StatsBand stats={home.stats} label={t.home.statsLabel} />}
       {s.pillars && <PillarsTriad eyebrow={t.home.pillarsEyebrow} title={t.home.pillarsTitle} pillars={home.pillars} />}
       {s.values && <ValuesPreview eyebrow={t.home.valuesEyebrow} title={t.home.valuesTitle} items={values.items} moreHref={href(locale, 'values')} moreLabel={t.nav.values} />}
       {s.iconMeaning && <IconMeaning data={home.iconMeaning} eyebrow={t.home.iconEyebrow} title={t.home.iconTitle} hint={t.home.iconHint} />}

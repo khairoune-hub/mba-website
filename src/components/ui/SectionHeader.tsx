@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Tri } from '../motifs/Tri'
+import { SplitReveal } from '../motion/SplitReveal'
 
 export function Eyebrow({ children, tone = 'green' }: { children: ReactNode; tone?: 'green' | 'light' }) {
   return (
@@ -32,7 +33,7 @@ export function SectionHeader({
       <div className={`max-w-3xl ${align === 'center' ? 'mx-auto' : ''}`}>
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
         <Tag id={id} className={`${Tag === 'h1' ? 't-h1' : 't-h2'} mt-3`}>
-          {title}
+          {typeof title === 'string' && Tag === 'h2' ? <SplitReveal text={title} /> : title}
         </Tag>
         {lead && <p className="t-lead mt-5 max-w-2xl">{lead}</p>}
       </div>

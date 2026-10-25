@@ -2,6 +2,7 @@ import type { HomeContent, PillarKey } from '@/content/defaults'
 import { PATH_A, PATH_M, PATH_SUMMIT } from '../brand/mark-paths'
 import { SectionHeader } from '../ui/SectionHeader'
 import { Reveal } from '../ui/Reveal'
+import { TraceBorder } from '../motifs/TraceBorder'
 
 const shape: Record<PillarKey, { d: string; fill: string; box: string }> = {
   industry: { d: PATH_M, fill: 'var(--color-green)', box: '0 0 380 534' },
@@ -19,7 +20,8 @@ export function PillarsTriad({ eyebrow, title, pillars }: { eyebrow: string; tit
           {pillars.map((p, i) => {
             const s = shape[p.key] ?? shape.industry
             return (
-              <Reveal as="li" key={p.key} delay={i * 0.08} className="group relative overflow-hidden rounded-[var(--radius-card)] bg-mist p-8 pb-10 ring-1 ring-transparent transition-[box-shadow,transform] duration-500 ease-[var(--ease-out)] hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] hover:ring-green/50 md:min-h-[360px]">
+              <Reveal as="li" key={p.key} delay={i * 0.08} className="group relative overflow-hidden rounded-[var(--radius-card)] bg-mist p-8 pb-10 ring-1 ring-transparent transition-[box-shadow,transform] duration-500 ease-[var(--ease-out)] hover:-translate-y-1 hover:shadow-[var(--shadow-lift)] md:min-h-[360px]">
+                <TraceBorder />
                 <svg viewBox={s.box} className="h-24 w-auto transition-transform duration-500 ease-[var(--ease-out)] group-hover:-translate-y-1" aria-hidden="true">
                   <path d={s.d} fill={s.fill} />
                 </svg>

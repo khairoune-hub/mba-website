@@ -6,10 +6,10 @@ type Variant = 'primary' | 'secondary' | 'onDark' | 'navy' | 'ghost'
 
 const styles: Record<Variant, string> = {
   // Charcoal on green = 4.6:1 (AA). White on green is not allowed for text.
-  primary: 'bg-green text-charcoal hover:bg-[#9cc853] shadow-[0_1px_0_rgb(0_0_0/0.04)]',
+  primary: 'btn-sheen bg-green text-charcoal hover:bg-[#9cc853] shadow-[0_1px_0_rgb(0_0_0/0.04)] hover:shadow-[0_8px_24px_-10px_rgb(94_143_42/0.7)]',
   secondary: 'bg-white/70 text-charcoal ring-1 ring-inset ring-charcoal/20 hover:ring-green-ink backdrop-blur',
   onDark: 'bg-white text-navy hover:bg-green',
-  navy: 'bg-navy text-white hover:bg-charcoal',
+  navy: 'btn-sheen bg-navy text-white hover:bg-charcoal',
   ghost: 'text-charcoal hover:text-green-ink',
 }
 

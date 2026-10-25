@@ -38,6 +38,7 @@ export const ar = {
   },
   home: {
     whoEyebrow: 'من نحن',
+    statsLabel: 'أرقام رئيسية',
     pillarsEyebrow: 'ثلاث ركائز',
     pillarsTitle: 'صناعة، تجارة، وخدمات — تحت راية واحدة',
     valuesEyebrow: 'قيمنا',

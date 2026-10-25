@@ -128,6 +128,28 @@ export const HomePage: GlobalConfig = {
           ],
         },
         {
+          label: L('الأرقام', 'Chiffres clés', 'Key figures'),
+          fields: [
+            {
+              name: 'stats',
+              type: 'array',
+              localized: true,
+              maxRows: 4,
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    { name: 'value', type: 'number', required: true },
+                    { name: 'prefix', type: 'text', admin: { width: '20%' } },
+                    { name: 'suffix', type: 'text', admin: { width: '20%' } },
+                  ],
+                },
+                { name: 'label', type: 'text', required: true },
+              ],
+            },
+          ],
+        },
+        {
           label: L('الدعوة الختامية', 'Bandeau final', 'Closing CTA'),
           fields: [
             {
@@ -148,6 +170,7 @@ export const HomePage: GlobalConfig = {
               name: 'sections',
               type: 'group',
               fields: [
+                sectionToggle('stats', 'الأرقام', 'Chiffres clés'),
                 sectionToggle('pillars', 'الركائز', 'Piliers'),
                 sectionToggle('values', 'القيم', 'Valeurs'),
                 sectionToggle('iconMeaning', 'معنى الرمز', 'Sens du symbole'),

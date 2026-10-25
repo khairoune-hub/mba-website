@@ -24,9 +24,13 @@ Next.js 15 (App Router) + Payload CMS 3 in the same app, Supabase Postgres + Sup
 
 ```bash
 pnpm install
-cp .env.example .env          # fill PAYLOAD_SECRET at least
+cp .env.example .env          # then set at least these three:
+#   PAYLOAD_SECRET=$(openssl rand -hex 32)
+#   DATABASE_URI=postgres://mba:mba@127.0.0.1:5432/mba
+#   DATABASE_URI_DIRECT=postgres://mba:mba@127.0.0.1:5432/mba
 docker compose up -d          # local Postgres on :5432 (or point DATABASE_URI at a Supabase dev project)
-pnpm dev                      # dev uses Payload "push" to sync the schema automatically
+pnpm migrate                  # creates the schema (same migrations as production)
+pnpm dev
 pnpm seed                     # admin + editor users, globals (AR+FR), 3 posts, 3 events, sample images
 ```
 
@@ -47,7 +51,7 @@ Without `S3_BUCKET`, uploads are stored on disk in `./media` (dev only).
 | `pnpm generate:types` / `pnpm generate:importmap` | after changing collections / admin components |
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm lint:logical` | fails on physical `ml-/pr-/left-/text-right…` classes (RTL safety) |
-| `pnpm fonts` | TheMixArab TTF → WOFF2 (`assets/` → `src/fonts/`) |
+| `pnpm fonts` | rebuild TheMixArab WOFF2 from `assets/*.ttf` (needs `pip install fonttools brotli`): fixes Bold's corrupt `post` table that browsers reject and adds Arabic shaping (GSUB) |
 | `node scripts/build-mark.mjs`, `build-wordmark.mjs`, `build-brand-assets.mjs` | regenerate the traced logo paths, static logo SVGs, favicon, OG image, trimmed glass render |
 
 ## Supabase setup
@@ -105,7 +109,7 @@ Key rules: green `#90BE41` is for accents/CTAs with **charcoal text on it** (whi
 
 ## Quality
 
-- Lighthouse (local production build, this repo's seed): Accessibility, Best Practices and SEO 100 on all tested pages; Performance 100 on desktop and ~86–91 on simulated mobile (LCP is the hero image under slow-4G throttling). Re-measure on the real host/CDN.
+- Lighthouse (local production build, this repo's seed): Accessibility, Best Practices and SEO 100 on all tested pages; Performance 99–100 on desktop and ~90–93 on simulated mobile (LCP is the hero image under slow-4G throttling). Re-measure on the real host/CDN.
 - SEO: per-page `generateMetadata` with hreflang (`ar-DZ`, `fr-DZ`, `x-default`), canonical URLs, localized `sitemap.xml`, `robots.txt`, OG images, JSON-LD (Organization, NewsArticle, Event).
 - Accessibility: skip link, focus-visible green outline, keyboard-operable drawer (focus trap, Esc), gallery lightbox (`<dialog>`, arrow keys follow reading direction), `prefers-reduced-motion` respected.
 

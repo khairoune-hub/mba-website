@@ -2,7 +2,11 @@
 // The pooler (6543, transaction mode) does not support the session features migrations need.
 //   node scripts/migrate.mjs            → payload migrate
 //   node scripts/migrate.mjs create foo → payload migrate:create foo
+import { existsSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
+
+// Load .env like Next/Payload do (variables already set in the environment win).
+if (existsSync('.env')) process.loadEnvFile('.env')
 
 const [sub, ...rest] = process.argv.slice(2)
 const direct = process.env.DATABASE_URI_DIRECT || process.env.DATABASE_URI

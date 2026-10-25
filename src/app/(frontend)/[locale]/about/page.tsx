@@ -8,7 +8,6 @@ import { pageMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/sections/PageHero'
 import { CtaBand } from '@/components/sections/CtaBand'
 import { MbaLogo } from '@/components/brand/MbaLogo'
-import { MbaMark } from '@/components/brand/MbaMark'
 import { GlassIcon } from '@/components/brand/GlassIcon'
 import { Hairlines } from '@/components/motifs/Hairlines'
 import { SlantMask } from '@/components/motifs/SlantMask'
@@ -16,6 +15,10 @@ import { Tri, TriList } from '@/components/motifs/Tri'
 import { MediaImage } from '@/components/ui/MediaImage'
 import { Reveal } from '@/components/ui/Reveal'
 import { Eyebrow } from '@/components/ui/SectionHeader'
+import { ScrollTimeline } from '@/components/motion/ScrollTimeline'
+import { SlantReveal } from '@/components/motion/SlantReveal'
+import { MarkAssemble } from '@/components/motion/MarkAssemble'
+import { SplitReveal } from '@/components/motion/SplitReveal'
 
 type Props = { params: Promise<{ locale: string }> }
 
@@ -41,14 +44,16 @@ export default async function AboutPage({ params }: Props) {
         <div className="container-mba grid items-center gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-6">
             <Eyebrow>{t.nav.about}</Eyebrow>
-            <h2 id="story" className="t-h2 mt-3">{about.story.title}</h2>
+            <h2 id="story" className="t-h2 mt-3"><SplitReveal text={about.story.title} /></h2>
             <p className="mt-6 text-lg leading-[1.85]">{about.story.body}</p>
           </Reveal>
           <Reveal delay={0.1} className="lg:col-span-5 lg:col-start-8">
             {about.image ? (
-              <SlantMask ratio={4 / 5}>
-                <MediaImage media={about.image} size="card" fill sizes="(min-width: 1024px) 40vw, 90vw" className="object-cover" />
-              </SlantMask>
+              <SlantReveal rtl={locale === 'ar'}>
+                <SlantMask ratio={4 / 5}>
+                  <MediaImage media={about.image} size="card" fill sizes="(min-width: 1024px) 40vw, 90vw" className="object-cover" />
+                </SlantMask>
+              </SlantReveal>
             ) : (
               <div className="bg-radial-field relative overflow-hidden rounded-[var(--radius-lg)] p-10">
                 <GlassIcon className="mx-auto w-full max-w-sm" />
@@ -63,10 +68,10 @@ export default async function AboutPage({ params }: Props) {
         <Hairlines preset="band" tone="white" className="opacity-30" />
         <div className="container-mba section-y relative grid gap-10 lg:grid-cols-12">
           <Reveal className="lg:col-span-4">
-            <MbaMark variant="onDark" className="h-16 w-auto" />
+            <MarkAssemble variant="onDark" className="h-20 w-auto" />
           </Reveal>
           <Reveal delay={0.08} className="lg:col-span-8">
-            <h2 id="heritage" className="t-h2 !text-white">{about.heritage.title}</h2>
+            <h2 id="heritage" className="t-h2 !text-white"><SplitReveal text={about.heritage.title} /></h2>
             <p className="mt-6 text-lg leading-[1.9]">{about.heritage.body}</p>
           </Reveal>
         </div>
@@ -90,8 +95,7 @@ export default async function AboutPage({ params }: Props) {
         <section className="bg-radial-field relative isolate overflow-hidden" aria-labelledby="timeline">
           <div className="container-mba section-y relative">
             <h2 id="timeline" className="t-h2">{locale === 'ar' ? 'محطات' : 'Repères'}</h2>
-            <ol className="relative mt-14 grid gap-10 md:grid-cols-4 md:gap-6">
-              <span aria-hidden="true" className="absolute inset-y-0 start-[7px] w-px bg-green/50 md:inset-x-0 md:start-0 md:top-[7px] md:h-px md:w-auto md:bg-[linear-gradient(to_right,var(--color-green),transparent)] rtl:md:bg-[linear-gradient(to_left,var(--color-green),transparent)]" />
+            <ScrollTimeline className="mt-14 grid gap-10 md:grid-cols-4 md:gap-6">
               {about.timeline.map((step, i) => (
                 <Reveal as="li" key={step.year + step.title} delay={i * 0.08} className="relative ps-10 md:ps-0 md:pt-10">
                   <span aria-hidden="true" className="absolute start-0 top-1 md:top-0">
@@ -102,7 +106,7 @@ export default async function AboutPage({ params }: Props) {
                   <p className="mt-2 text-charcoal/85">{step.body}</p>
                 </Reveal>
               ))}
-            </ol>
+            </ScrollTimeline>
           </div>
         </section>
       )}

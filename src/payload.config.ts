@@ -1,3 +1,4 @@
+import './lib/env'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { buildConfig, type EmailAdapter } from 'payload'
@@ -107,7 +108,9 @@ export default buildConfig({
       ssl: /supabase\.(co|com)/.test(process.env.DATABASE_URI || '') ? { rejectUnauthorized: false } : undefined,
     },
     migrationDir: path.resolve(dirname, 'migrations'),
-    push: process.env.NODE_ENV !== 'production' && process.env.PAYLOAD_DB_PUSH !== 'false',
+    // Schema changes go through migrations (`pnpm migrate`) everywhere. Push is opt-in for quick local
+    // experiments only: it prompts interactively and conflicts with migrations.
+    push: process.env.PAYLOAD_DB_PUSH === 'true',
   }),
   email: emailAdapter(),
   sharp,

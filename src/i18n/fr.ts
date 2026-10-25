@@ -40,6 +40,7 @@ export const fr: Dictionary = {
   },
   home: {
     whoEyebrow: 'Qui sommes-nous',
+    statsLabel: 'Chiffres clés',
     pillarsEyebrow: 'Trois piliers',
     pillarsTitle: 'Industrie, commerce et services — sous une même bannière',
     valuesEyebrow: 'Nos valeurs',

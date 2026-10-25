@@ -15,6 +15,7 @@ import { ValueWord } from '@/components/motifs/ValueWord'
 import { Button, ButtonLink, LinkArrow } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import { Card } from '@/components/ui/Card'
+import { FontCheck } from '@/components/ui/FontCheck'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { ArrowIcon, CalendarIcon, ClockIcon, GlobeIcon, MailIcon, PhoneIcon, PinIcon } from '@/components/ui/icons'
 
@@ -73,7 +74,10 @@ export default async function Styleguide({ params }: { params: Promise<{ locale:
       </Block>
 
       <Block title="Typography">
-        <div className="space-y-6">
+        <FontCheck />
+        <div className="mt-8 space-y-6">
+          <p className="text-4xl font-bold">الأمانة — Bold 700</p>
+          <p className="text-4xl font-black">الحصافة — Black 900</p>
           <p className="t-display">{locale === 'ar' ? 'تحالف الثقة' : 'L’alliance de la confiance'}</p>
           <p className="t-h1">{locale === 'ar' ? 'عنوان رئيسي — Heading 1' : 'Titre principal — Heading 1'}</p>
           <p className="t-h2">{locale === 'ar' ? 'عنوان قسم — Heading 2' : 'Titre de section — Heading 2'}</p>

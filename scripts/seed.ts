@@ -121,7 +121,7 @@ async function seed() {
   /* Globals */
   for (const loc of ['ar', 'fr'] as Loc[]) {
     const h = homeDefaults[loc]
-    await payload.updateGlobal({ slug: 'home-page', locale: loc, context: ctx, data: { hero: h.hero, who: h.who, pillars: h.pillars, iconMeaning: h.iconMeaning, cta: h.cta, sections: h.sections } as any })
+    await payload.updateGlobal({ slug: 'home-page', locale: loc, context: ctx, data: { hero: h.hero, who: h.who, pillars: h.pillars, iconMeaning: h.iconMeaning, cta: h.cta, stats: h.stats, sections: h.sections } as any })
     await payload.updateGlobal({ slug: 'values', locale: loc, context: ctx, data: { items: valuesDefaults[loc] } as any })
     const a = aboutDefaults[loc]
     await payload.updateGlobal({

@@ -9,6 +9,7 @@ import { LocaleSwitcher } from './LocaleSwitcher'
 import { MobileNav } from './MobileNav'
 import { NavLinks } from './NavLinks'
 import { navLinks, resolveLink } from './nav'
+import { HeaderShell } from './HeaderShell'
 
 export async function SiteHeader({ locale }: { locale: Locale }) {
   const t = getDictionary(locale)
@@ -19,10 +20,10 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
   const switcher = <LocaleSwitcher locale={locale} label={t.nav.switchTo} ariaLabel={t.nav.switchToLabel} />
 
   return (
-    <header className="sticky top-0 z-40 border-b border-transparent bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/70 [&:has(+main_[data-hero])]:border-border/0">
-      <div className="container-mba flex h-[72px] items-center justify-between gap-6 lg:h-[84px]">
+    <HeaderShell>
+      <div className="container-mba flex h-[72px] items-center justify-between gap-6 transition-[height] duration-500 ease-[var(--ease-out)] lg:h-[84px] lg:group-data-[scrolled]/header:h-[64px]">
         <Link href={href(locale, 'home')} className="shrink-0 rounded-md" aria-label={t.meta.brand}>
-          <MbaLogo className="h-9 w-auto lg:h-11" title={t.meta.brand} />
+          <MbaLogo className="h-9 w-auto transition-[height] duration-500 lg:h-11 lg:group-data-[scrolled]/header:h-9" title={t.meta.brand} />
         </Link>
         <nav aria-label={t.nav.primary} className="hidden lg:block">
           <NavLinks links={links} className="flex items-center gap-8" />
@@ -42,6 +43,6 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
           </MobileNav>
         </div>
       </div>
-    </header>
+    </HeaderShell>
   )
 }
