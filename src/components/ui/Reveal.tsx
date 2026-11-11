@@ -1,23 +1,39 @@
 'use client'
 
-import { domAnimation, LazyMotion, m, useReducedMotion } from 'framer-motion'
-import type { ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
-/** Fade + 12px rise, once, when scrolled into view. LazyMotion keeps the Framer Motion payload small. */
-export function Reveal({ children, delay = 0, className, as = 'div' }: { children: ReactNode; delay?: number; className?: string; as?: 'div' | 'li' | 'section' | 'article' }) {
-  const reduce = useReducedMotion()
-  const M = m[as]
+/**
+ * One quiet fade when a block first scrolls into view. No movement, no stagger.
+ * Content is visible on the server render and when JS or IntersectionObserver is unavailable;
+ * only blocks that start below the fold are hidden, so nothing above it ever flickers.
+ */
+export function Reveal({ children, className = '', as: Tag = 'div' }: { children: ReactNode; className?: string; as?: 'div' | 'li' | 'section' | 'article' }) {
+  const ref = useRef<HTMLElement>(null)
+  const [hidden, setHidden] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (el.getBoundingClientRect().top < window.innerHeight) return
+    setHidden(true)
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHidden(false)
+          io.disconnect()
+        }
+      },
+      { rootMargin: '0px 0px -8% 0px' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
   return (
-    <LazyMotion features={domAnimation} strict>
-      <M
-        className={className}
-        initial={reduce ? false : { opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '0px 0px -10% 0px' }}
-        transition={{ duration: 0.52, ease: [0.22, 0.61, 0.36, 1], delay }}
-      >
-        {children}
-      </M>
-    </LazyMotion>
+    // @ts-expect-error -- polymorphic ref on an intrinsic element
+    <Tag ref={ref} className={`reveal ${className}`} data-hidden={hidden || undefined}>
+      {children}
+    </Tag>
   )
 }

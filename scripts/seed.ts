@@ -1,9 +1,10 @@
 /**
- * Seeds an admin user, globals (AR + FR), categories, 3 posts and events with branded sample images.
- * Images go through Payload, so they land in Supabase Storage when S3_* is configured.
+ * Seeds an admin user and the globals (AR + FR) from src/content/defaults.ts.
+ * NOTE: updating a global overwrites what editors changed in the admin.
  *
- *   pnpm seed                    # skips content that already exists
- *   SEED_RESET=true pnpm seed    # deletes posts/events/categories/media/pages first
+ *   pnpm seed                         # users + globals only
+ *   SEED_SAMPLES=true pnpm seed       # also sample categories/posts/events (FICTIONAL, for local dev only)
+ *   SEED_RESET=true pnpm seed         # deletes posts/events/categories/media/pages first
  */
 import sharp from 'sharp'
 import { readFileSync } from 'node:fs'
@@ -11,7 +12,6 @@ import path from 'node:path'
 import { getPayload, type Payload } from 'payload'
 import config from '../src/payload.config'
 import { aboutDefaults, homeDefaults, valuesDefaults, footerDefaults } from '../src/content/defaults'
-import { PATH_A, PATH_M, PATH_SUMMIT } from '../src/components/brand/mark-paths'
 
 type Loc = 'ar' | 'fr'
 const ctx = { disableRevalidate: true }
@@ -28,45 +28,23 @@ const upload = (id: number) => ({ type: 'upload', relationTo: 'media', value: id
 const doc = (dir: 'rtl' | 'ltr', children: unknown[]) => ({ root: { type: 'root', format: '', indent: 0, version: 1, direction: dir, children } })
 
 /* ---------- Branded sample images (generated, no stock photos) ---------- */
-const mark = (fills: [string, string, string]) =>
-  `<path fill="${fills[0]}" d="${PATH_M}"/><path fill="${fills[1]}" d="${PATH_A}"/><path fill="${fills[2]}" d="${PATH_SUMMIT}"/>`
-
-function hairline(w: number, h: number, stroke: string) {
-  const dx = (h * 0.55) * Math.tan((24 * Math.PI) / 180)
-  return `<path d="M0 ${h * 0.62} H${w * 0.55} a60 60 0 0 0 54 -36 L${w * 0.55 + dx + 54} -10" fill="none" stroke="${stroke}" stroke-width="2"/>
-  <path d="M${w} ${h * 0.82} H${w * 0.3} a60 60 0 0 1 -54 36 L${w * 0.3 - 120} ${h + 10}" fill="none" stroke="${stroke}" stroke-width="2"/>`
-}
-
-async function makeImage(kind: 'field' | 'green' | 'navy' | 'charcoal' | 'mist', w = 1600, h = 1000, withGlass = false) {
-  const bgs: Record<string, string> = {
-    field: `<radialGradient id="c" cx="50%" cy="45%" r="70%"><stop offset="35%" stop-color="#fff"/><stop offset="100%" stop-color="#e6e6e5"/></radialGradient>
-      <radialGradient id="g1" cx="0%" cy="25%" r="50%"><stop offset="0%" stop-color="#90BE41" stop-opacity=".7"/><stop offset="100%" stop-color="#90BE41" stop-opacity="0"/></radialGradient>
-      <radialGradient id="g2" cx="100%" cy="90%" r="50%"><stop offset="0%" stop-color="#90BE41" stop-opacity=".7"/><stop offset="100%" stop-color="#90BE41" stop-opacity="0"/></radialGradient>`,
-    green: `<linearGradient id="c" x1="0" x2="1"><stop offset="0" stop-color="#c9e19c"/><stop offset=".45" stop-color="#90BE41"/><stop offset="1" stop-color="#5e8f2a"/></linearGradient>`,
-    navy: `<linearGradient id="c" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1b2540"/></linearGradient>`,
-    charcoal: `<linearGradient id="c" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#3a3a3b"/><stop offset="1" stop-color="#4d4d4e"/></linearGradient>`,
-    mist: `<linearGradient id="c" x1="0" x2="1"><stop offset="0" stop-color="#f3f4f2"/><stop offset="1" stop-color="#e3e6df"/></linearGradient>`,
-  }
-  const fills: Record<string, [string, string, string]> = {
-    field: ['#90BE41', '#424243', '#90BE41'],
-    green: ['#ffffff', '#424243', '#ffffff'],
-    navy: ['#90BE41', '#ffffff', '#90BE41'],
-    charcoal: ['#90BE41', '#ffffff', '#90BE41'],
-    mist: ['#90BE41', '#424243', '#90BE41'],
-  }
-  const stroke = kind === 'field' || kind === 'mist' ? 'rgba(144,190,65,.55)' : 'rgba(255,255,255,.45)'
-  const s = (h * 0.42) / 534
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><defs>${bgs[kind]}</defs>
-    <rect width="${w}" height="${h}" fill="url(#c)"/>${kind === 'field' ? '<rect width="100%" height="100%" fill="url(#g1)"/><rect width="100%" height="100%" fill="url(#g2)"/>' : ''}
-    ${hairline(w, h, stroke)}
-    ${withGlass ? '' : `<g transform="translate(${(w - 794 * s) / 2} ${(h - 534 * s) / 2}) scale(${s})">${mark(fills[kind])}</g>`}</svg>`
-  let img = sharp(Buffer.from(svg))
-  if (withGlass) {
-    const glass = await sharp(path.resolve('public/brand/glass.webp')).resize({ height: Math.round(h * 0.62) }).toBuffer()
-    const meta = await sharp(glass).metadata()
-    img = sharp(await img.png().toBuffer()).composite([{ input: glass, left: Math.round((w - (meta.width ?? 0)) / 2), top: Math.round(h * 0.18) }])
-  }
-  return img.webp({ quality: 86 }).toBuffer()
+/** Plain brand background with the "A + triangle" mark and the brand-book corner triangles. */
+async function makeImage(kind: 'ink' | 'green' | 'mist', w = 1600, h = 1000) {
+  const bg = { ink: '#030405', green: '#1b8453', mist: '#f5f6f4' }[kind]
+  const markFile = kind === 'mist' ? 'public/brand/mark-color.svg' : 'public/brand/mark-white.svg'
+  const markSvg = readFileSync(path.resolve(markFile), 'utf8')
+  const tri = kind === 'green' ? '#ffffff' : '#1b8453'
+  const op = kind === 'green' ? 0.25 : 1
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+    <rect width="${w}" height="${h}" fill="${bg}"/>
+    <path d="M0 ${h * 0.62} L${h * 0.22} ${h} H0 Z" fill="${tri}" fill-opacity="${op}"/>
+    <path d="M${w} ${h * 0.7} L${w - h * 0.17} ${h} H${w} Z" fill="${tri}" fill-opacity="${op}"/></svg>`
+  const mark = await sharp(Buffer.from(markSvg)).resize({ width: Math.round(w * 0.28) }).png().toBuffer()
+  const meta = await sharp(mark).metadata()
+  return sharp(Buffer.from(svg))
+    .composite([{ input: mark, left: Math.round((w - (meta.width ?? 0)) / 2), top: Math.round((h - (meta.height ?? 0)) / 2) }])
+    .webp({ quality: 86 })
+    .toBuffer()
 }
 
 async function uploadImage(payload: Payload, name: string, data: Buffer, alt: Record<Loc, string>) {
@@ -121,23 +99,14 @@ async function seed() {
   /* Globals */
   for (const loc of ['ar', 'fr'] as Loc[]) {
     const h = homeDefaults[loc]
-    await payload.updateGlobal({ slug: 'home-page', locale: loc, context: ctx, data: { hero: h.hero, who: h.who, pillars: h.pillars, iconMeaning: h.iconMeaning, cta: h.cta, stats: h.stats, sections: h.sections } as any })
-    await payload.updateGlobal({ slug: 'values', locale: loc, context: ctx, data: { items: valuesDefaults[loc] } as any })
-    const a = aboutDefaults[loc]
     await payload.updateGlobal({
-      slug: 'about-page',
+      slug: 'home-page',
       locale: loc,
       context: ctx,
-      data: {
-        intro: a.intro,
-        story: a.story,
-        heritage: a.heritage,
-        logo: a.logo,
-        vision: { ...a.vision, points: a.vision.points.map((text) => ({ text })) },
-        model: { ...a.model, points: a.model.points.map((text) => ({ text })) },
-        timeline: a.timeline,
-      } as any,
+      data: { hero: h.hero, who: h.who, mission: h.mission, vision: h.vision, activities: h.activities, cta: h.cta, sections: h.sections } as any,
     })
+    await payload.updateGlobal({ slug: 'values', locale: loc, context: ctx, data: { items: valuesDefaults[loc] } as any })
+    await payload.updateGlobal({ slug: 'about-page', locale: loc, context: ctx, data: { intro: aboutDefaults[loc].intro } as any })
     await payload.updateGlobal({
       slug: 'footer',
       locale: loc,
@@ -146,8 +115,7 @@ async function seed() {
         phone: footerDefaults.phone,
         email: footerDefaults.email,
         address: footerDefaults.address[loc],
-        blurb: loc === 'ar' ? 'شبكة شركات | صوت اقتصادي | فرص شراكة' : 'Réseau d’entreprises · Voix économique · Opportunités de partenariat',
-        socials: [{ platform: 'linkedin', url: 'https://www.linkedin.com/' }, { platform: 'facebook', url: 'https://www.facebook.com/' }],
+        blurb: loc === 'ar' ? 'تحالف اقتصادي جزائري نحو آفاق إفريقية.' : 'Une alliance économique algérienne tournée vers l’Afrique.',
       } as any,
     })
     await payload.updateGlobal({
@@ -156,27 +124,19 @@ async function seed() {
       context: ctx,
       data: {
         siteName: loc === 'ar' ? 'تحالف أعمال ميزاب' : 'MZAB Business Alliance',
-        defaultTitle: loc === 'ar' ? 'MZAB Business Alliance — تحالف الثقة' : 'MZAB Business Alliance — L’alliance de la confiance',
-        defaultDescription: homeDefaults[loc].who.body.slice(0, 190),
+        defaultTitle: `MZAB Business Alliance — ${homeDefaults[loc].hero.title}`,
+        defaultDescription: homeDefaults[loc].who.body.split('\n')[0].slice(0, 190),
       } as any,
     })
   }
-  const navRoutes = ['about', 'values', 'news', 'events', 'contact']
-  const navLabels: Record<Loc, string[]> = { ar: ['من نحن', 'قيمنا', 'الأخبار', 'الفعاليات', 'اتصل بنا'], fr: ['À propos', 'Nos valeurs', 'Actualités', 'Événements', 'Contact'] }
-  const header = await payload.updateGlobal({
-    slug: 'header',
-    locale: 'ar',
-    context: ctx,
-    data: { navItems: navRoutes.map((route, i) => ({ link: { label: navLabels.ar[i], type: 'internal', route } })), cta: { label: 'انضم إلى التحالف', type: 'internal', route: 'contact' } } as any,
-  })
-  await payload.updateGlobal({
-    slug: 'header',
-    locale: 'fr',
-    context: ctx,
-    data: { navItems: (header as any).navItems.map((n: any, i: number) => ({ id: n.id, link: { ...n.link, label: navLabels.fr[i] } })), cta: { label: 'Rejoindre l’alliance', type: 'internal', route: 'contact' } } as any,
-  })
+  // Empty header = the code's default nav (incl. the "Activités" anchor) and the "Adhérer" button to #adhesion.
+  await payload.updateGlobal({ slug: 'header', context: ctx, data: { navItems: [], cta: { label: null, type: 'internal', route: null, url: null } } as any })
   log('globals updated (ar + fr)')
 
+  if (process.env.SEED_SAMPLES !== 'true') {
+    log('done ✔ (sample posts/events skipped; set SEED_SAMPLES=true for local dev)')
+    process.exit(0)
+  }
   if ((await payload.count({ collection: 'posts' })).totalDocs > 0) {
     log('posts already exist — skipping content (use SEED_RESET=true to rebuild)')
     process.exit(0)
@@ -184,11 +144,11 @@ async function seed() {
 
   /* Media */
   const img = {
-    forum: await uploadImage(payload, 'mba-forum', await makeImage('field', 1600, 1000, true), { ar: 'الأيقونة الزجاجية لتحالف أعمال ميزاب', fr: 'Le symbole en verre de MZAB Business Alliance' }),
+    forum: await uploadImage(payload, 'mba-ink', await makeImage('ink'), { ar: 'رمز التحالف على خلفية داكنة', fr: 'Le symbole de l’alliance sur fond noir' }),
     green: await uploadImage(payload, 'mba-green', await makeImage('green'), { ar: 'رمز التحالف على خلفية خضراء', fr: 'Le symbole de l’alliance sur fond vert' }),
-    navy: await uploadImage(payload, 'mba-navy', await makeImage('navy'), { ar: 'رمز التحالف على خلفية كحلية', fr: 'Le symbole de l’alliance sur fond bleu nuit' }),
-    charcoal: await uploadImage(payload, 'mba-charcoal', await makeImage('charcoal'), { ar: 'رمز التحالف على خلفية فحمية', fr: 'Le symbole sur fond anthracite' }),
-    mist: await uploadImage(payload, 'mba-mist', await makeImage('mist'), { ar: 'رمز التحالف على خلفية فاتحة', fr: 'Le symbole sur fond clair' }),
+    navy: await uploadImage(payload, 'mba-ink-2', await makeImage('ink'), { ar: 'رمز التحالف على خلفية داكنة', fr: 'Le symbole sur fond noir' }),
+    charcoal: await uploadImage(payload, 'mba-mist', await makeImage('mist'), { ar: 'رمز التحالف على خلفية فاتحة', fr: 'Le symbole sur fond clair' }),
+    mist: await uploadImage(payload, 'mba-mist-2', await makeImage('mist'), { ar: 'رمز التحالف على خلفية فاتحة', fr: 'Le symbole sur fond clair' }),
   }
   log('media uploaded')
 

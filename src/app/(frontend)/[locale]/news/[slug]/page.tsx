@@ -9,7 +9,6 @@ import { formatDate, readingTime } from '@/lib/format'
 import { pageMetadata, siteURL } from '@/lib/seo'
 import { articleLd, JsonLd } from '@/lib/jsonld'
 import { SetAlternates } from '@/components/layout/Alternates'
-import { Hairlines } from '@/components/motifs/Hairlines'
 import { Tri } from '@/components/motifs/Tri'
 import { PostCard } from '@/components/cards/PostCard'
 import { MediaImage } from '@/components/ui/MediaImage'
@@ -66,8 +65,7 @@ export default async function ArticlePage({ params }: Props) {
     <>
       <SetAlternates {...paths} />
       <article>
-        <header className="bg-radial-field relative isolate overflow-hidden">
-          <Hairlines preset="section" />
+        <header className="relative isolate overflow-hidden border-b border-border bg-mist">
           <div className="container-mba relative max-w-4xl pb-12 pt-12 md:pt-16">
             <Link href={href(locale, 'news')} className="inline-flex items-center gap-2 text-sm font-semibold text-green-ink hover:text-charcoal">
               <ArrowBackIcon className="size-4" />

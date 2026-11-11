@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Media } from '@/payload-types'
 import { ChevronIcon, CloseIcon } from './icons'
-import { SlantReveal } from '../motion/SlantReveal'
 
 type Labels = { close: string; prev: string; next: string }
 
@@ -43,11 +42,11 @@ export function Gallery({ images, labels, dir }: { images: Media[]; labels: Labe
       <ul className="grid grid-cols-2 gap-3 md:grid-cols-3">
         {images.map((m, i) => (
           <li key={m.id} className={i === 0 ? 'col-span-2 row-span-2' : ''}>
-            <SlantReveal rtl={dir === 'rtl'} delay={i * 0.08}>
+            <>
               <button type="button" onClick={() => setIndex(i)} className="group relative block aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-md)] bg-mist">
                 <Image src={src(m, 'card')} alt={m.alt || ''} fill sizes={i === 0 ? '(min-width: 768px) 66vw, 100vw' : '33vw'} className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
               </button>
-            </SlantReveal>
+            </>
           </li>
         ))}
       </ul>
@@ -55,7 +54,7 @@ export function Gallery({ images, labels, dir }: { images: Media[]; labels: Labe
         ref={dialogRef}
         onClose={() => setIndex(null)}
         onClick={(e) => e.target === e.currentTarget && setIndex(null)}
-        className="m-auto h-[100dvh] max-h-none w-screen max-w-none bg-navy/95 p-0 text-white backdrop:bg-navy/80"
+        className="m-auto h-[100dvh] max-h-none w-screen max-w-none bg-ink/95 p-0 text-white backdrop:bg-ink/80"
       >
         {current && (
           <div className="flex h-full flex-col items-center justify-center gap-4 p-4 md:p-10">

@@ -84,3 +84,52 @@ export const SocialIcon = ({ name, className = 'size-5' }: P & { name: string })
     </svg>
   )
 }
+
+/* ---------- Activities ---------- */
+export const MegaphoneIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden="true" {...base}>
+    <path d="M4 10v4a1 1 0 0 0 1 1h2l8 4V5L7 9H5a1 1 0 0 0-1 1zM7 15l1.5 4.5h2.5L10 16M18.5 9.5a3.5 3.5 0 0 1 0 5" />
+  </svg>
+)
+export const PlaneIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden="true" {...base}>
+    <path d="M10.5 13.5 4 11l1.5-1.5 7 .5 4-4a2.1 2.1 0 0 1 3 3l-4 4 .5 7L14.5 21.5 12 15l-3 3v2.5L7.5 22 6 18l-4-1.5L3.5 15H6z" />
+  </svg>
+)
+export const ExportIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden="true" {...base}>
+    <path d="M3 8.5 12 4l9 4.5v7L12 20l-9-4.5zM3 8.5l9 4.5 9-4.5M12 13v7" />
+    <path d="M15.5 6.2 7 10.5" />
+  </svg>
+)
+export const BuildingIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden="true" {...base}>
+    <path d="M4 21V5.5L13 3v18M13 9l7 2v10M2.5 21h19M7.5 8h2M7.5 12h2M7.5 16h2M16.5 14h1M16.5 17.5h1" />
+  </svg>
+)
+export const StandIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden="true" {...base}>
+    <path d="M3 9h18l-1.5-4.5h-15zM3 9c0 1.4 1 2.5 2.25 2.5S7.5 10.4 7.5 9c0 1.4 1 2.5 2.25 2.5S12 10.4 12 9c0 1.4 1 2.5 2.25 2.5S16.5 10.4 16.5 9c0 1.4 1 2.5 2.25 2.5S21 10.4 21 9M5 11.5V20h14v-8.5M10 20v-5h4v5" />
+  </svg>
+)
+
+/* ---------- Values ---------- */
+export const HandshakeIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden="true" {...base}>
+    <path d="m11 7-1.5-1.5a2 2 0 0 0-1.4-.6H6L2 9v5l2 .5M13 7l1.5-1.5a2 2 0 0 1 1.4-.6H18l4 4v5l-3.5 1M13 7l-3.4 3.4a1.5 1.5 0 0 0 2.1 2.1L13.5 11l4.8 4.5a1.4 1.4 0 0 1-2 2L14 15.3M16.3 17.5a1.4 1.4 0 0 1-2 2L12.5 18M12.5 18a1.4 1.4 0 0 1-2 2L4 14.5" />
+  </svg>
+)
+export const NetworkIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden="true" {...base}>
+    <circle cx="12" cy="5" r="2.5" />
+    <circle cx="5" cy="18" r="2.5" />
+    <circle cx="19" cy="18" r="2.5" />
+    <path d="M10.8 7.2 6.2 15.8M13.2 7.2l4.6 8.6M7.5 18h9" />
+  </svg>
+)
+export const AwardIcon = ({ className = 'size-6' }: P) => (
+  <svg viewBox="0 0 24 24" className={className} aria-hidden="true" {...base}>
+    <circle cx="12" cy="9" r="6" />
+    <path d="m12 6 1 2 2.2.3-1.6 1.5.4 2.2-2-1-2 1 .4-2.2-1.6-1.5L11 8zM8.5 14 7 21l5-2.5 5 2.5-1.5-7" />
+  </svg>
+)

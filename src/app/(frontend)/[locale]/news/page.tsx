@@ -63,13 +63,13 @@ export default async function NewsPage({ params, searchParams }: Props) {
           {posts.docs.length ? (
             <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {posts.docs.map((p, i) => (
-                <Reveal as="li" key={p.id} delay={(i % 3) * 0.06}>
+                <Reveal as="li" key={p.id}>
                   <PostCard post={p} locale={locale} priority={i < 3} />
                 </Reveal>
               ))}
             </ul>
           ) : (
-            <p className="mt-10 text-muted">{t.home.noNews}</p>
+            <p className="mt-10 text-muted">{t.news.none}</p>
           )}
           <Pagination page={posts.page} totalPages={posts.totalPages} makeHref={(p) => qs(p, category)} labels={t.pagination} />
         </div>

@@ -425,8 +425,9 @@ export interface ContactSubmission {
   email: string;
   phone?: string | null;
   company?: string | null;
+  sector?: string | null;
   subject?: ('membership' | 'partnership' | 'press' | 'other') | null;
-  message: string;
+  message?: string | null;
   locale?: string | null;
   emailed?: boolean | null;
   updatedAt: string;
@@ -729,6 +730,7 @@ export interface ContactSubmissionsSelect<T extends boolean = true> {
   email?: T;
   phone?: T;
   company?: T;
+  sector?: T;
   subject?: T;
   message?: T;
   locale?: T;
@@ -863,50 +865,40 @@ export interface HomePage {
   };
   who?: {
     title?: string | null;
-    body?: string | null;
     /**
-     * Phrase highlighted in green
+     * Separate paragraphs with a blank line
      */
-    highlight?: string | null;
+    body?: string | null;
   };
-  pillars?:
-    | {
-        key: 'industry' | 'trade' | 'services';
-        title: string;
-        body?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  iconMeaning?: {
+  mission?: {
+    title?: string | null;
+    body?: string | null;
+  };
+  vision?: {
+    title?: string | null;
+    body?: string | null;
+  };
+  activities?: {
+    title?: string | null;
     items?:
       | {
-          shape: 'm' | 'a' | 'summit';
-          keyword: string;
-          body?: string | null;
+          /**
+           * Sets the icon
+           */
+          key: 'awareness' | 'trips' | 'export' | 'establishment' | 'fairs';
+          title: string;
           id?: string | null;
         }[]
       | null;
-    closing?: string | null;
   };
-  stats?:
-    | {
-        value: number;
-        prefix?: string | null;
-        suffix?: string | null;
-        label: string;
-        id?: string | null;
-      }[]
-    | null;
   cta?: {
     title?: string | null;
     body?: string | null;
     buttonLabel?: string | null;
   };
   sections?: {
-    stats?: boolean | null;
-    pillars?: boolean | null;
     values?: boolean | null;
-    iconMeaning?: boolean | null;
+    activities?: boolean | null;
     news?: boolean | null;
     events?: boolean | null;
     cta?: boolean | null;
@@ -923,17 +915,11 @@ export interface Value {
   intro?: string | null;
   items?:
     | {
-        key: 'integrity' | 'trust' | 'prudence' | 'solidarity';
+        /**
+         * Sets the icon
+         */
+        key: 'trust' | 'cooperation' | 'excellence';
         title: string;
-        /**
-         * Text before ▲
-         */
-        before: string;
-        /**
-         * Text after ▲
-         */
-        after: string;
-        motto: string;
         body?: string | null;
         id?: string | null;
       }[]
@@ -942,6 +928,8 @@ export interface Value {
   createdAt?: string | null;
 }
 /**
+ * Who-we-are text, mission, vision and values are edited in Home page and Values.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "about-page".
  */
@@ -951,47 +939,7 @@ export interface AboutPage {
     title?: string | null;
     lead?: string | null;
   };
-  story?: {
-    title?: string | null;
-    body?: string | null;
-  };
-  heritage?: {
-    title?: string | null;
-    body?: string | null;
-  };
-  logo?: {
-    title?: string | null;
-    body?: string | null;
-  };
-  vision?: {
-    title?: string | null;
-    body?: string | null;
-    points?:
-      | {
-          text: string;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  model?: {
-    title?: string | null;
-    body?: string | null;
-    points?:
-      | {
-          text: string;
-          id?: string | null;
-        }[]
-      | null;
-  };
   image?: (number | null) | Media;
-  timeline?:
-    | {
-        year: string;
-        title: string;
-        body?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   team?:
     | {
         name: string;
@@ -1087,37 +1035,30 @@ export interface HomePageSelect<T extends boolean = true> {
     | {
         title?: T;
         body?: T;
-        highlight?: T;
       };
-  pillars?:
+  mission?:
     | T
     | {
-        key?: T;
         title?: T;
         body?: T;
-        id?: T;
       };
-  iconMeaning?:
+  vision?:
     | T
     | {
+        title?: T;
+        body?: T;
+      };
+  activities?:
+    | T
+    | {
+        title?: T;
         items?:
           | T
           | {
-              shape?: T;
-              keyword?: T;
-              body?: T;
+              key?: T;
+              title?: T;
               id?: T;
             };
-        closing?: T;
-      };
-  stats?:
-    | T
-    | {
-        value?: T;
-        prefix?: T;
-        suffix?: T;
-        label?: T;
-        id?: T;
       };
   cta?:
     | T
@@ -1129,10 +1070,8 @@ export interface HomePageSelect<T extends boolean = true> {
   sections?:
     | T
     | {
-        stats?: T;
-        pillars?: T;
         values?: T;
-        iconMeaning?: T;
+        activities?: T;
         news?: T;
         events?: T;
         cta?: T;
@@ -1152,9 +1091,6 @@ export interface ValuesSelect<T extends boolean = true> {
     | {
         key?: T;
         title?: T;
-        before?: T;
-        after?: T;
-        motto?: T;
         body?: T;
         id?: T;
       };
@@ -1173,57 +1109,7 @@ export interface AboutPageSelect<T extends boolean = true> {
         title?: T;
         lead?: T;
       };
-  story?:
-    | T
-    | {
-        title?: T;
-        body?: T;
-      };
-  heritage?:
-    | T
-    | {
-        title?: T;
-        body?: T;
-      };
-  logo?:
-    | T
-    | {
-        title?: T;
-        body?: T;
-      };
-  vision?:
-    | T
-    | {
-        title?: T;
-        body?: T;
-        points?:
-          | T
-          | {
-              text?: T;
-              id?: T;
-            };
-      };
-  model?:
-    | T
-    | {
-        title?: T;
-        body?: T;
-        points?:
-          | T
-          | {
-              text?: T;
-              id?: T;
-            };
-      };
   image?: T;
-  timeline?:
-    | T
-    | {
-        year?: T;
-        title?: T;
-        body?: T;
-        id?: T;
-      };
   team?:
     | T
     | {

@@ -16,6 +16,7 @@ if (!direct) {
 }
 const cmd = sub ? [`migrate:${sub}`, ...rest] : ['migrate']
 const res = spawnSync('pnpm', ['exec', 'payload', ...cmd], {
+  shell: process.platform === 'win32', // pnpm is a .cmd shim on Windows
   stdio: 'inherit',
   env: { ...process.env, DATABASE_URI: direct, PAYLOAD_DB_PUSH: 'false' },
 })

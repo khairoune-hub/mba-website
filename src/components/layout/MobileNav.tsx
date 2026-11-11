@@ -6,8 +6,7 @@ import { usePathname } from 'next/navigation'
 import { CloseIcon, MenuIcon } from '../ui/icons'
 import { NavLinks } from './NavLinks'
 import type { ResolvedLink } from './nav'
-import { MbaMark } from '../brand/MbaMark'
-import { Hairlines } from '../motifs/Hairlines'
+import { MbaLogo } from '../brand/MbaLogo'
 
 /** Drawer that slides in from the inline-end edge (right in LTR, left in RTL). */
 export function MobileNav({ links, labels, children }: { links: ResolvedLink[]; labels: { menu: string; close: string }; children?: React.ReactNode }) {
@@ -63,7 +62,7 @@ export function MobileNav({ links, labels, children }: { links: ResolvedLink[]; 
         createPortal(
           <>
       <div
-        className={`fixed inset-0 z-50 bg-navy/50 transition-opacity duration-300 ${open ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+        className={`fixed inset-0 z-50 bg-ink/50 transition-opacity duration-300 ${open ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
         onClick={() => setOpen(false)}
         aria-hidden="true"
       />
@@ -79,9 +78,8 @@ export function MobileNav({ links, labels, children }: { links: ResolvedLink[]; 
           open ? 'translate-x-0' : 'translate-x-full rtl:-translate-x-full'
         } ${open ? '' : 'invisible'}`}
       >
-        <Hairlines preset="section" className="opacity-60" />
         <div className="relative flex items-center justify-between px-6 py-5">
-          <MbaMark className="h-8 w-auto" />
+          <MbaLogo className="h-8 w-auto" />
           <button type="button" onClick={() => setOpen(false)} className="inline-flex size-11 items-center justify-center rounded-full ring-1 ring-inset ring-charcoal/15">
             <CloseIcon />
             <span className="sr-only">{labels.close}</span>

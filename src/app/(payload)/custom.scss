@@ -1,34 +1,34 @@
-/* MBA admin branding: green accent, brand radius, logo sizing. */
+/* MBA admin branding: green accent, brand radius, logo sizing. Colours follow brand book v1.2 artwork. */
 :root {
-  --color-charcoal: #424243;
-  --color-green: #90be41;
-  --mba-green: #90be41;
-  --mba-green-hover: #9cc853;
-  --mba-charcoal: #424243;
+  --color-ink: #030405;
+  --color-green: #1b8453;
+  --mba-green: #1b8453;
+  --mba-green-hover: #166c44;
+  --mba-ink: #030405;
 }
 
 .mba-admin-logo { width: 260px; max-width: 100%; height: auto; }
-.mba-admin-icon { width: 30px; height: auto; }
+.mba-admin-icon { width: 30px; height: auto; object-fit: contain; }
+/* Payload's dark theme: swap to the white lockup (both are rendered, CSS picks one). */
+.mba-admin-logo--dark, .mba-admin-icon--dark { display: none; }
+html[data-theme='dark'] {
+  .mba-admin-logo--light, .mba-admin-icon--light { display: none; }
+  .mba-admin-logo--dark, .mba-admin-icon--dark { display: block; }
+}
 
 .btn--style-primary {
   --bg-color: var(--mba-green);
   --hover-bg: var(--mba-green-hover);
-  --color: var(--mba-charcoal);
-  --hover-color: var(--mba-charcoal);
+  --color: #fff;
+  --hover-color: #fff;
   background-color: var(--mba-green);
-  color: var(--mba-charcoal);
-  &:hover:not(:disabled) { background-color: var(--mba-green-hover); color: var(--mba-charcoal); }
+  color: #fff;
+  &:hover:not(:disabled) { background-color: var(--mba-green-hover); color: #fff; }
 }
 
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: 2px solid var(--mba-green);
   outline-offset: 2px;
-}
-
-.template-minimal, .login {
-  background:
-    radial-gradient(40% 55% at 0% 25%, rgb(144 190 65 / 0.28), transparent 70%),
-    radial-gradient(40% 55% at 100% 90%, rgb(144 190 65 / 0.28), transparent 70%);
 }
 
 .nav__link--active, .nav-group__toggle--open { box-shadow: inset 3px 0 0 var(--mba-green); }

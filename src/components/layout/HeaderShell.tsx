@@ -51,7 +51,7 @@ export function HeaderShell({ children }: { children: ReactNode }) {
     <header
       data-scrolled={scrolled || undefined}
       className={`group/header sticky top-0 z-40 border-b will-change-transform transition-[transform,background-color,border-color,box-shadow] duration-300 ease-[var(--ease-out)] ${
-        scrolled ? 'border-border bg-white/90 shadow-[0_6px_24px_-18px_rgb(15_23_42/0.35)] backdrop-blur-md' : 'border-transparent bg-white/70 backdrop-blur-md'
+        scrolled ? 'border-border bg-white shadow-[0_6px_24px_-18px_rgb(3_4_5/0.35)]' : 'border-border bg-white'
       } ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
     >
       {children}

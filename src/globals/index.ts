@@ -60,7 +60,7 @@ export const HomePage: GlobalConfig = {
       type: 'tabs',
       tabs: [
         {
-          label: L('البطل', 'Héro', 'Hero'),
+          label: L('الواجهة', 'Héro', 'Hero'),
           fields: [
             {
               name: 'hero',
@@ -68,7 +68,7 @@ export const HomePage: GlobalConfig = {
               fields: [
                 { name: 'eyebrow', type: 'text', localized: true },
                 { name: 'title', type: 'text', localized: true },
-                { name: 'subtitle', type: 'text', localized: true },
+                { name: 'subtitle', type: 'textarea', localized: true },
                 { type: 'row', fields: [{ name: 'primaryLabel', type: 'text', localized: true }, { name: 'secondaryLabel', type: 'text', localized: true }] },
               ],
             },
@@ -82,75 +82,46 @@ export const HomePage: GlobalConfig = {
               type: 'group',
               fields: [
                 { name: 'title', type: 'text', localized: true },
-                { name: 'body', type: 'textarea', localized: true },
-                { name: 'highlight', type: 'text', localized: true, admin: { description: L('جزء من النص يُبرز بالأخضر', 'Partie du texte mise en évidence', 'Phrase highlighted in green') } },
+                { name: 'body', type: 'textarea', localized: true, admin: { description: L('افصل الفقرات بسطر فارغ', 'Séparez les paragraphes par une ligne vide', 'Separate paragraphs with a blank line') } },
               ],
             },
           ],
         },
         {
-          label: L('الركائز', 'Piliers', 'Pillars'),
-          fields: [
-            {
-              name: 'pillars',
-              type: 'array',
-              localized: true,
-              maxRows: 3,
-              fields: [
-                { name: 'key', type: 'select', required: true, options: ['industry', 'trade', 'services'].map((v) => ({ label: v, value: v })) },
-                { name: 'title', type: 'text', required: true },
-                { name: 'body', type: 'textarea' },
-              ],
-            },
-          ],
+          label: L('الرسالة والرؤية', 'Mission et vision', 'Mission & vision'),
+          fields: (['mission', 'vision'] as const).map((name) => ({
+            name,
+            type: 'group' as const,
+            fields: [
+              { name: 'title', type: 'text' as const, localized: true },
+              { name: 'body', type: 'textarea' as const, localized: true },
+            ],
+          })),
         },
         {
-          label: L('معنى الرمز', 'Sens du symbole', 'Icon meaning'),
+          label: L('الأنشطة', 'Activités', 'Activities'),
           fields: [
             {
-              name: 'iconMeaning',
+              name: 'activities',
               type: 'group',
               fields: [
+                { name: 'title', type: 'text', localized: true },
                 {
                   name: 'items',
                   type: 'array',
                   localized: true,
-                  maxRows: 3,
+                  maxRows: 8,
                   fields: [
-                    { name: 'shape', type: 'select', required: true, options: [{ label: 'M', value: 'm' }, { label: 'A', value: 'a' }, { label: 'Summit', value: 'summit' }] },
-                    { name: 'keyword', type: 'text', required: true },
-                    { name: 'body', type: 'textarea' },
+                    { name: 'key', type: 'select', required: true, options: ['awareness', 'trips', 'export', 'establishment', 'fairs'].map((v) => ({ label: v, value: v })), admin: { description: L('يحدد الأيقونة', 'Détermine l’icône', 'Sets the icon') } },
+                    { name: 'title', type: 'text', required: true },
                   ],
                 },
-                { name: 'closing', type: 'text', localized: true },
               ],
             },
           ],
         },
         {
-          label: L('الأرقام', 'Chiffres clés', 'Key figures'),
-          fields: [
-            {
-              name: 'stats',
-              type: 'array',
-              localized: true,
-              maxRows: 4,
-              fields: [
-                {
-                  type: 'row',
-                  fields: [
-                    { name: 'value', type: 'number', required: true },
-                    { name: 'prefix', type: 'text', admin: { width: '20%' } },
-                    { name: 'suffix', type: 'text', admin: { width: '20%' } },
-                  ],
-                },
-                { name: 'label', type: 'text', required: true },
-              ],
-            },
-          ],
-        },
-        {
-          label: L('الدعوة الختامية', 'Bandeau final', 'Closing CTA'),
+          label: L('استمارة الانضمام', 'Formulaire d’adhésion', 'Membership form'),
           fields: [
             {
               name: 'cta',
@@ -170,13 +141,11 @@ export const HomePage: GlobalConfig = {
               name: 'sections',
               type: 'group',
               fields: [
-                sectionToggle('stats', 'الأرقام', 'Chiffres clés'),
-                sectionToggle('pillars', 'الركائز', 'Piliers'),
                 sectionToggle('values', 'القيم', 'Valeurs'),
-                sectionToggle('iconMeaning', 'معنى الرمز', 'Sens du symbole'),
+                sectionToggle('activities', 'الأنشطة', 'Activités'),
                 sectionToggle('news', 'الأخبار', 'Actualités'),
                 sectionToggle('events', 'الفعاليات', 'Événements'),
-                sectionToggle('cta', 'الدعوة الختامية', 'Bandeau final'),
+                sectionToggle('cta', 'استمارة الانضمام', 'Formulaire d’adhésion'),
               ],
             },
           ],
@@ -198,18 +167,10 @@ export const Values: GlobalConfig = {
       type: 'array',
       localized: true,
       minRows: 0,
-      maxRows: 4,
+      maxRows: 6,
       label: L('القيم', 'Valeurs', 'Values'),
       fields: [
-        { type: 'row', fields: [{ name: 'key', type: 'select', required: true, options: ['integrity', 'trust', 'prudence', 'solidarity'].map((v) => ({ label: v, value: v })) }, { name: 'title', type: 'text', required: true }] },
-        {
-          type: 'row',
-          fields: [
-            { name: 'before', type: 'text', required: true, admin: { description: L('الجزء قبل ▲ (مثال: الأمـ)', 'Partie avant le ▲', 'Text before ▲') } },
-            { name: 'after', type: 'text', required: true, admin: { description: L('الجزء بعد ▲ (مثال: ـانة)', 'Partie après le ▲', 'Text after ▲') } },
-          ],
-        },
-        { name: 'motto', type: 'text', required: true, label: L('الشعار', 'Devise', 'Motto') },
+        { type: 'row', fields: [{ name: 'key', type: 'select', required: true, options: ['trust', 'cooperation', 'excellence'].map((v) => ({ label: v, value: v })), admin: { description: L('يحدد الأيقونة', 'Détermine l’icône', 'Sets the icon') } }, { name: 'title', type: 'text', required: true }] },
         { name: 'body', type: 'textarea', label: L('النص', 'Texte', 'Body') },
       ],
     },
@@ -218,39 +179,16 @@ export const Values: GlobalConfig = {
 
 export const About: GlobalConfig = {
   slug: 'about-page',
-  label: L('صفحة من نحن', 'Page À propos', 'About page'),
+  label: L('صفحة من نحن', 'Page Qui sommes-nous', 'About page'),
   ...adminOnly,
   hooks: { afterChange: [revalidateGlobal('about-page')] },
+  admin: {
+    ...adminOnly.admin,
+    description: L('النص والرسالة والرؤية والقيم تُعدَّل من الصفحة الرئيسية وصفحة القيم.', 'Le texte, la mission, la vision et les valeurs se modifient dans « Page d’accueil » et « Valeurs ».', 'Who-we-are text, mission, vision and values are edited in Home page and Values.'),
+  },
   fields: [
     { name: 'intro', type: 'group', fields: [{ name: 'title', type: 'text', localized: true }, { name: 'lead', type: 'textarea', localized: true }] },
-    ...(['story', 'heritage', 'logo'] as const).map((name) => ({
-      name,
-      type: 'group' as const,
-      fields: [
-        { name: 'title', type: 'text' as const, localized: true },
-        { name: 'body', type: 'textarea' as const, localized: true },
-      ],
-    })),
-    ...(['vision', 'model'] as const).map((name) => ({
-      name,
-      type: 'group' as const,
-      fields: [
-        { name: 'title', type: 'text' as const, localized: true },
-        { name: 'body', type: 'textarea' as const, localized: true },
-        { name: 'points', type: 'array' as const, localized: true, fields: [{ name: 'text', type: 'text' as const, required: true }] },
-      ],
-    })),
     { name: 'image', type: 'upload', relationTo: 'media', label: L('صورة', 'Image', 'Image') },
-    {
-      name: 'timeline',
-      type: 'array',
-      localized: true,
-      label: L('المسار', 'Repères', 'Timeline'),
-      fields: [
-        { type: 'row', fields: [{ name: 'year', type: 'text', required: true }, { name: 'title', type: 'text', required: true }] },
-        { name: 'body', type: 'textarea' },
-      ],
-    },
     {
       name: 'team',
       type: 'array',

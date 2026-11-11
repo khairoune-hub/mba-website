@@ -15,18 +15,18 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
   const t = getDictionary(locale)
   const header = await getHeader(locale)
   const links = navLinks(locale, t, header.navItems)
-  const cta = header.cta ? resolveLink(locale, header.cta) : { label: t.cta.join, href: href(locale, 'contact') }
+  const cta = header.cta?.label ? resolveLink(locale, header.cta) : { label: t.cta.joinShort, href: `${href(locale, 'home')}#adhesion` }
 
   const switcher = <LocaleSwitcher locale={locale} label={t.nav.switchTo} ariaLabel={t.nav.switchToLabel} />
 
   return (
     <HeaderShell>
-      <div className="container-mba flex h-[72px] items-center justify-between gap-6 transition-[height] duration-500 ease-[var(--ease-out)] lg:h-[84px] lg:group-data-[scrolled]/header:h-[64px]">
+      <div className="container-mba flex h-[68px] items-center justify-between gap-6 lg:h-[80px]">
         <Link href={href(locale, 'home')} className="shrink-0 rounded-md" aria-label={t.meta.brand}>
-          <MbaLogo className="h-9 w-auto transition-[height] duration-500 lg:h-11 lg:group-data-[scrolled]/header:h-9" title={t.meta.brand} />
+          <MbaLogo className="h-8 w-auto lg:h-10" title={t.meta.brand} />
         </Link>
         <nav aria-label={t.nav.primary} className="hidden lg:block">
-          <NavLinks links={links} className="flex items-center gap-8" />
+          <NavLinks links={links} className="flex items-center gap-7" />
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
           {switcher}

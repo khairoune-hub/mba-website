@@ -4,8 +4,6 @@ import type { Page } from '@/payload-types'
 import { RichText } from '../ui/RichText'
 import { MediaImage } from '../ui/MediaImage'
 import { ButtonLink } from '../ui/Button'
-import { SlantMask } from '../motifs/SlantMask'
-import { Hairlines } from '../motifs/Hairlines'
 import { PageHero } from './PageHero'
 import { Reveal } from '../ui/Reveal'
 
@@ -32,7 +30,7 @@ export function Blocks({ blocks, locale }: { blocks: Page['layout']; locale: Loc
                 {b.title && <h2 className="t-h2">{b.title}</h2>}
                 <ul className="mt-10 grid gap-6 md:grid-cols-3">
                   {(b.items ?? []).map((it, i) => (
-                    <Reveal as="li" key={it.id ?? i} delay={i * 0.06} className="overflow-hidden rounded-[var(--radius-card)] bg-mist">
+                    <Reveal as="li" key={it.id ?? i} className="overflow-hidden rounded-[var(--radius-card)] bg-mist">
                       {it.image && (
                         <div className="relative aspect-[16/10]">
                           <MediaImage media={it.image} size="card" fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
@@ -52,13 +50,12 @@ export function Blocks({ blocks, locale }: { blocks: Page['layout']; locale: Loc
             const url = l?.type === 'custom' ? l.url || '#' : href(locale, (l?.route as RouteKey) || 'contact')
             return (
               <section key={b.id} className="container-mba pb-[var(--section-y)]">
-                <div className="bg-green-band relative isolate overflow-hidden rounded-[var(--radius-lg)] px-6 py-14 sm:px-12">
-                  <Hairlines preset="band" tone="white" />
+                <div className="on-dark relative isolate overflow-hidden rounded-[var(--radius-card)] bg-green px-6 py-14 text-white sm:px-12">
                   <div className="relative max-w-2xl">
-                    <h2 className="t-h2 !text-navy">{b.title}</h2>
-                    {b.body && <p className="t-lead mt-4 !text-navy/90">{b.body}</p>}
+                    <h2 className="t-h2 !text-white">{b.title}</h2>
+                    {b.body && <p className="t-lead mt-4 !text-white/90">{b.body}</p>}
                     {l?.label && (
-                      <ButtonLink href={url} variant="navy" className="mt-8" arrow>
+                      <ButtonLink href={url} variant="onDark" className="mt-8" arrow>
                         {l.label}
                       </ButtonLink>
                     )}
@@ -71,9 +68,9 @@ export function Blocks({ blocks, locale }: { blocks: Page['layout']; locale: Loc
             return (
               <section key={b.id} className="container-mba section-y grid items-center gap-12 lg:grid-cols-2">
                 <div className={b.imageSide === 'end' ? 'lg:order-2' : ''}>
-                  <SlantMask ratio={4 / 3}>
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)] bg-mist">
                     <MediaImage media={b.image} size="card" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
-                  </SlantMask>
+                  </div>
                 </div>
                 <div>
                   {b.title && <h2 className="t-h2">{b.title}</h2>}

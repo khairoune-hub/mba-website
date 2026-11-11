@@ -1,24 +1,16 @@
 import type { ReactNode } from 'react'
-import { Hairlines } from '../motifs/Hairlines'
-import { SlantCorner } from '../motifs/SlantCorner'
-import { Blooms } from '../motifs/Blooms'
-import { Parallax } from '../motion/Parallax'
 import { Eyebrow } from '../ui/SectionHeader'
 
-/** Header band for inner pages: soft radial field, hairlines and a slanted green corner. */
+/** Header band for inner pages: ink background with the static brand triangles, like the home hero. */
 export function PageHero({ eyebrow, title, lead, children }: { eyebrow?: ReactNode; title: ReactNode; lead?: ReactNode; children?: ReactNode }) {
   return (
-    <section data-hero className="bg-radial-field relative isolate overflow-hidden">
-      <Blooms className="opacity-60" />
-      <Hairlines preset="section" animate="load" />
-      <Parallax distance={24} className="pointer-events-none absolute inset-0">
-        <SlantCorner corner="bottom-end" className="w-[min(30vw,300px)] opacity-90" />
-      </Parallax>
-      <div className="container-mba relative pb-16 pt-14 md:pb-24 md:pt-20">
-        <div className="animate-rise max-w-3xl">
-          {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-          <h1 className="t-h1 mt-4">{title}</h1>
-          {lead && <p className="t-lead mt-6 max-w-2xl">{lead}</p>}
+    <section data-hero className="on-dark relative isolate overflow-hidden bg-ink text-white">
+      <div className="corner-tris" aria-hidden="true" />
+      <div className="container-mba relative py-16 md:py-24">
+        <div className="max-w-3xl">
+          {eyebrow && <Eyebrow tone="light">{eyebrow}</Eyebrow>}
+          <h1 className="t-h1 mt-4 !text-white">{title}</h1>
+          {lead && <p className="t-lead mt-6 max-w-2xl !text-white/75">{lead}</p>}
           {children}
         </div>
       </div>

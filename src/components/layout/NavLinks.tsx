@@ -9,7 +9,9 @@ export function NavLinks({ links, className = '', onNavigate }: { links: Resolve
   return (
     <ul className={className}>
       {links.map((l) => {
-        const active = !l.external && (pathname === l.href || pathname.startsWith(l.href + '/'))
+        // Section anchors (#…) are never "current"; the locale root only matches itself.
+        const root = l.href.split('/').length === 2
+        const active = !l.external && !l.href.includes('#') && (pathname === l.href || (!root && pathname.startsWith(l.href + '/')))
         return (
           <li key={l.href}>
             <Link
@@ -18,7 +20,7 @@ export function NavLinks({ links, className = '', onNavigate }: { links: Resolve
               aria-current={active ? 'page' : undefined}
               target={l.external ? '_blank' : undefined}
               rel={l.external ? 'noopener noreferrer' : undefined}
-              className="group relative inline-flex py-2 text-[0.95rem] font-medium text-charcoal transition-colors hover:text-green-ink aria-[current=page]:text-green-ink"
+              className="group relative inline-flex py-2 text-[0.95rem] font-medium text-charcoal transition-colors hover:text-green aria-[current=page]:text-green"
             >
               {l.label}
               <span

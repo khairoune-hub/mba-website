@@ -1,27 +1,33 @@
-import type { ValueItem } from '@/content/defaults'
-import { Hairlines } from '../motifs/Hairlines'
-import { ValueWord } from '../motifs/ValueWord'
+import type { ValueItem, ValueKey } from '@/content/defaults'
 import { LinkArrow } from '../ui/Button'
+import { AwardIcon, HandshakeIcon, NetworkIcon } from '../ui/icons'
 import { SectionHeader } from '../ui/SectionHeader'
 import { Reveal } from '../ui/Reveal'
 
-/** Brand book slide 6: four values, ▲ set into each word, separated by fine diagonal lines. */
-export function ValuesPreview({ eyebrow, title, items, moreHref, moreLabel }: { eyebrow: string; title: string; items: ValueItem[]; moreHref: string; moreLabel: string }) {
+const icons: Record<ValueKey, typeof HandshakeIcon> = { trust: HandshakeIcon, cooperation: NetworkIcon, excellence: AwardIcon }
+
+/** The alliance's values in equal columns, each with a line icon. */
+export function ValuesPreview({ eyebrow, title, items, more }: { eyebrow: string; title?: string; items: ValueItem[]; more?: { href: string; label: string } }) {
   return (
-    <section className="bg-radial-field relative isolate overflow-hidden" aria-labelledby="values-title">
-      <Hairlines preset="values" />
-      <div className="container-mba section-y relative">
-        <SectionHeader eyebrow={eyebrow} title={title} id="values-title" action={<LinkArrow href={moreHref}>{moreLabel}</LinkArrow>} />
-        <ul className="mt-14 grid gap-x-16 gap-y-12 md:grid-cols-2">
-          {items.map((v, i) => (
-            <Reveal as="li" key={v.key} delay={i * 0.07} className={`max-w-xl ${i % 2 === 1 ? 'md:translate-y-12' : ''}`}>
-              <h3 className="text-[clamp(2.2rem,1.6rem+2.4vw,3.6rem)] font-bold leading-tight text-charcoal [:lang(fr)_&]:font-semibold">
-                <ValueWord before={v.before} after={v.after} title={v.title} />
-              </h3>
-              <p className="mt-3 text-lg text-charcoal">{v.motto}</p>
-            </Reveal>
-          ))}
-        </ul>
+    <section className="section-y" aria-labelledby="values-title">
+      <div className="container-mba">
+        <SectionHeader eyebrow={title ? eyebrow : undefined} title={title || eyebrow} id="values-title" action={more && <LinkArrow href={more.href}>{more.label}</LinkArrow>} />
+        <Reveal as="div" className="mt-12">
+          <ul className="grid gap-px overflow-hidden rounded-[var(--radius-card)] bg-border ring-1 ring-border md:grid-cols-3">
+            {items.map((v) => {
+              const Icon = icons[v.key] ?? AwardIcon
+              return (
+                <li key={v.key + v.title} className="bg-white p-8 md:p-10">
+                  <span className="inline-flex size-12 items-center justify-center rounded-[var(--radius-md)] bg-green-soft text-green">
+                    <Icon className="size-6" />
+                  </span>
+                  <h3 className="t-h3 mt-6">{v.title}</h3>
+                  {v.body && <p className="mt-3 text-ink/75">{v.body}</p>}
+                </li>
+              )
+            })}
+          </ul>
+        </Reveal>
       </div>
     </section>
   )

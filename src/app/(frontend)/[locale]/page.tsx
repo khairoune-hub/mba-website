@@ -7,16 +7,16 @@ import { getEvents, getFooter, getHome, getPosts, getValues } from '@/lib/querie
 import { pageMetadata } from '@/lib/seo'
 import { HomeHero } from '@/components/sections/HomeHero'
 import { WhoWeAre } from '@/components/sections/WhoWeAre'
-import { PillarsTriad } from '@/components/sections/PillarsTriad'
+import { MissionVision } from '@/components/sections/MissionVision'
 import { ValuesPreview } from '@/components/sections/ValuesPreview'
-import { IconMeaning } from '@/components/sections/IconMeaning'
+import { Activities } from '@/components/sections/Activities'
 import { CtaBand } from '@/components/sections/CtaBand'
-import { StatsBand } from '@/components/sections/StatsBand'
 import { PostCard } from '@/components/cards/PostCard'
 import { EventCard } from '@/components/cards/EventCard'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { LinkArrow } from '@/components/ui/Button'
 import { Reveal } from '@/components/ui/Reveal'
+import { ContactForm } from './contact/ContactForm'
 
 type Props = { params: Promise<{ locale: string }> }
 
@@ -42,51 +42,51 @@ export default async function HomePage({ params }: Props) {
   return (
     <>
       <HomeHero locale={locale} hero={home.hero} />
-      <WhoWeAre locale={locale} who={home.who} />
-      {s.stats !== false && <StatsBand stats={home.stats} label={t.home.statsLabel} />}
-      {s.pillars && <PillarsTriad eyebrow={t.home.pillarsEyebrow} title={t.home.pillarsTitle} pillars={home.pillars} />}
-      {s.values && <ValuesPreview eyebrow={t.home.valuesEyebrow} title={t.home.valuesTitle} items={values.items} moreHref={href(locale, 'values')} moreLabel={t.nav.values} />}
-      {s.iconMeaning && <IconMeaning data={home.iconMeaning} eyebrow={t.home.iconEyebrow} title={t.home.iconTitle} hint={t.home.iconHint} />}
+      <WhoWeAre eyebrow={t.home.whoEyebrow} who={home.who} more={{ href: href(locale, 'about'), label: t.cta.about }} />
+      <MissionVision mission={home.mission} vision={home.vision} />
+      {s.values && values.items.length > 0 && <ValuesPreview eyebrow={t.home.valuesEyebrow} items={values.items} />}
+      {s.activities && home.activities.items.length > 0 && <Activities eyebrow={t.home.activitiesEyebrow} activities={home.activities} />}
 
-      {s.news && (
-        <section className="section-y bg-mist" aria-labelledby="news-title">
+      {/* News and events only appear once there is something to show. */}
+      {s.news && posts.docs.length > 0 && (
+        <section className="section-y" aria-labelledby="news-title">
           <div className="container-mba">
             <SectionHeader eyebrow={t.home.newsEyebrow} title={t.home.newsTitle} id="news-title" action={<LinkArrow href={href(locale, 'news')}>{t.cta.allNews}</LinkArrow>} />
-            {posts.docs.length ? (
-              <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {posts.docs.map((p, i) => (
-                  <Reveal as="li" key={p.id} delay={i * 0.07}>
+            <Reveal as="div" className="mt-12">
+              <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {posts.docs.map((p) => (
+                  <li key={p.id}>
                     <PostCard post={p} locale={locale} />
-                  </Reveal>
+                  </li>
                 ))}
               </ul>
-            ) : (
-              <p className="mt-10 text-muted">{t.home.noNews}</p>
-            )}
+            </Reveal>
           </div>
         </section>
       )}
 
-      {s.events && (
-        <section className="section-y" aria-labelledby="events-title">
+      {s.events && events.docs.length > 0 && (
+        <section className={`section-y ${s.news && posts.docs.length > 0 ? 'bg-mist' : ''}`} aria-labelledby="events-title">
           <div className="container-mba">
             <SectionHeader eyebrow={t.home.eventsEyebrow} title={t.home.eventsTitle} id="events-title" action={<LinkArrow href={href(locale, 'events')}>{t.cta.allEvents}</LinkArrow>} />
-            {events.docs.length ? (
-              <ul className="mt-12 grid gap-6 lg:grid-cols-2">
-                {events.docs.map((e, i) => (
-                  <Reveal as="li" key={e.id} delay={i * 0.07}>
+            <Reveal as="div" className="mt-12">
+              <ul className="grid gap-6 lg:grid-cols-2">
+                {events.docs.map((e) => (
+                  <li key={e.id}>
                     <EventCard event={e} locale={locale} />
-                  </Reveal>
+                  </li>
                 ))}
               </ul>
-            ) : (
-              <p className="mt-10 text-muted">{t.home.noEvents}</p>
-            )}
+            </Reveal>
           </div>
         </section>
       )}
 
-      {s.cta && <CtaBand title={home.cta.title} body={home.cta.body} buttonLabel={home.cta.buttonLabel} buttonHref={href(locale, 'contact')} phone={footer.phone} email={footer.email} />}
+      {s.cta && (
+        <CtaBand eyebrow={t.home.joinEyebrow} title={home.cta.title} body={home.cta.body} phone={footer.phone} email={footer.email}>
+          <ContactForm locale={locale} t={t.contact} variant="membership" submitLabel={home.cta.buttonLabel} />
+        </CtaBand>
+      )}
     </>
   )
 }

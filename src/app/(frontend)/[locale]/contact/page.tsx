@@ -6,7 +6,6 @@ import { getFooter } from '@/lib/queries'
 import { pageMetadata } from '@/lib/seo'
 import { PageHero } from '@/components/sections/PageHero'
 import { MailIcon, PhoneIcon, PinIcon } from '@/components/ui/icons'
-import { TriCluster } from '@/components/motifs/Tri'
 import { ContactForm } from './ContactForm'
 
 type Props = { params: Promise<{ locale: string }> }
@@ -33,17 +32,16 @@ export default async function ContactPage({ params }: Props) {
             <ContactForm locale={locale} t={t.contact} />
           </div>
           <aside className="lg:col-span-4 lg:col-start-9">
-            <div className="relative overflow-hidden rounded-[var(--radius-card)] bg-navy p-8 text-white/85">
-              <TriCluster className="absolute end-5 top-5 w-14" />
+            <div className="relative overflow-hidden rounded-[var(--radius-card)] bg-ink p-8 text-white/85">
               <h2 className="text-xl font-semibold !text-white">{t.contact.details}</h2>
               <ul className="mt-6 space-y-5">
                 <li className="flex gap-3">
                   <PhoneIcon className="mt-0.5 size-5 text-green" />
-                  <a href={`tel:${footer.phone.replace(/\s/g, '')}`} dir="ltr" className="hover:text-green">{footer.phone}</a>
+                  <a href={`tel:${footer.phone.replace(/\s/g, '')}`} dir="ltr" className="hover:text-white hover:underline">{footer.phone}</a>
                 </li>
                 <li className="flex gap-3">
                   <MailIcon className="mt-0.5 size-5 text-green" />
-                  <a href={`mailto:${footer.email}`} dir="ltr" className="break-all hover:text-green">{footer.email}</a>
+                  <a href={`mailto:${footer.email}`} dir="ltr" className="break-all hover:text-white hover:underline">{footer.email}</a>
                 </li>
                 <li className="flex gap-3">
                   <PinIcon className="mt-0.5 size-5 text-green" />

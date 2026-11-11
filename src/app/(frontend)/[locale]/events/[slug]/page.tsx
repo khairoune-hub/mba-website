@@ -9,7 +9,6 @@ import { formatDateRange, formatTime } from '@/lib/format'
 import { pageMetadata, siteURL } from '@/lib/seo'
 import { eventLd, JsonLd } from '@/lib/jsonld'
 import { SetAlternates } from '@/components/layout/Alternates'
-import { Hairlines } from '@/components/motifs/Hairlines'
 import { MediaImage } from '@/components/ui/MediaImage'
 import { RichText } from '@/components/ui/RichText'
 import { Gallery } from '@/components/ui/Gallery'
@@ -55,8 +54,7 @@ export default async function EventPage({ params }: Props) {
     <>
       <SetAlternates {...paths} />
       <article>
-        <header className="bg-radial-field relative isolate overflow-hidden">
-          <Hairlines preset="section" />
+        <header className="relative isolate overflow-hidden border-b border-border bg-mist">
           <div className="container-mba relative pb-14 pt-12 md:pt-16">
             <Link href={href(locale, 'events')} className="inline-flex items-center gap-2 text-sm font-semibold text-green-ink hover:text-charcoal">
               <ArrowBackIcon className="size-4" />

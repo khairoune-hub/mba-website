@@ -1,11 +1,10 @@
 import type { ReactNode } from 'react'
-import { Tri } from '../motifs/Tri'
-import { SplitReveal } from '../motion/SplitReveal'
 
+/** Small uppercase label with a short green rule before it. */
 export function Eyebrow({ children, tone = 'green' }: { children: ReactNode; tone?: 'green' | 'light' }) {
   return (
-    <p className={`t-eyebrow inline-flex items-center gap-2 ${tone === 'light' ? '!text-white' : ''}`}>
-      <Tri className="size-[0.7em]" tone={tone === 'light' ? 'white' : 'green'} />
+    <p className={`t-eyebrow inline-flex items-center gap-3 ${tone === 'light' ? '!text-white/80' : ''}`}>
+      <span aria-hidden="true" className={`h-px w-8 ${tone === 'light' ? 'bg-white/60' : 'bg-green'}`} />
       {children}
     </p>
   )
@@ -33,7 +32,7 @@ export function SectionHeader({
       <div className={`max-w-3xl ${align === 'center' ? 'mx-auto' : ''}`}>
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
         <Tag id={id} className={`${Tag === 'h1' ? 't-h1' : 't-h2'} mt-3`}>
-          {typeof title === 'string' && Tag === 'h2' ? <SplitReveal text={title} /> : title}
+          {title}
         </Tag>
         {lead && <p className="t-lead mt-5 max-w-2xl">{lead}</p>}
       </div>

@@ -58,7 +58,7 @@ export default async function EventsPage({ params, searchParams }: Props) {
           {events.docs.length ? (
             <ul className="mt-10 grid gap-6 lg:grid-cols-2">
               {events.docs.map((e, i) => (
-                <Reveal as="li" key={e.id} delay={(i % 2) * 0.06}>
+                <Reveal as="li" key={e.id}>
                   <EventCard event={e} locale={locale} />
                 </Reveal>
               ))}

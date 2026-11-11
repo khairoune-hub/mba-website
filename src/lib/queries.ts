@@ -69,12 +69,8 @@ export const getAbout = (locale: Locale) =>
     ['global:about-page'],
     async (d) => {
       const g: any = await findGlobal('about-page', locale, d)
-      const base = withDefaults(aboutDefaults[locale], g)
-      const pts = (p: any, def: string[]) => (Array.isArray(p) && p.length ? p.map((x: any) => x.text) : def)
       return {
-        ...base,
-        vision: { ...base.vision, points: pts(g?.vision?.points, aboutDefaults[locale].vision.points) },
-        model: { ...base.model, points: pts(g?.model?.points, aboutDefaults[locale].model.points) },
+        ...withDefaults(aboutDefaults[locale], g),
         image: g?.image && typeof g.image === 'object' ? g.image : null,
         team: Array.isArray(g?.team) ? g.team : [],
       }
